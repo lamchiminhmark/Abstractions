@@ -4,39 +4,39 @@
 
 (define lat? (lambda (exp)
                (cond
-                 [(atom? exp) #f]
                  [(null? exp) #t]
+                 [(atom? exp) #f]
                  [(atom? (car exp)) (lat? (cdr exp))]
                  [else #f])))
 
 (define not-lat? (lambda (exp)
                    (cond
-                     [(atom? exp) #t]
                      [(null? exp) #f]
+                     [(atom? exp) #t]
                      [(list? (car exp)) #t]
                      [else (not-lat? (cdr exp))])))
 
 (define list-of-ints? (lambda (exp)
                         (cond
-                          [(atom? exp) #f]
                           [(null? exp) #t]
+                          [(atom? exp) #f]
                           [(integer? (car exp)) (list-of-ints? (cdr exp))]
                           [else #f])))
 
 (define list-of-same? (lambda (pred exp)
                         (cond
-                          [(atom? exp) #f]
                           [(null? exp) #t]
+                          [(atom? exp) #f]                          
                           [(pred (car exp)) (list-of-same? pred (cdr exp))]
                           [else #f])))
 
 (define list-of-same2 (lambda (pred)
                         (lambda (exp)
                           (cond
-                          [(atom? exp) #f]
-                          [(null? exp) #t]
-                          [(pred (car exp)) (list-of-same? pred (cdr exp))]
-                          [else #f]))))
+                            [(null? exp) #t]
+                            [(atom? exp) #f]                          
+                            [(pred (car exp)) (list-of-same? pred (cdr exp))]
+                            [else #f]))))
 
 (define contains? (lambda (thing lat)
                    (cond
