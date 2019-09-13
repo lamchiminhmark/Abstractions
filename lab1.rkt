@@ -4,39 +4,39 @@
 
 (define lat? (lambda (exp)
                (cond
-                 [(null? exp) #t]
                  [(atom? exp) #f]
+                 [(null? exp) #t]
                  [(atom? (car exp)) (lat? (cdr exp))]
                  [else #f])))
 
 (define not-lat? (lambda (exp)
                    (cond
-                     [(null? exp) #f]
                      [(atom? exp) #t]
+                     [(null? exp) #f]
                      [(list? (car exp)) #t]
                      [else (not-lat? (cdr exp))])))
 
 (define list-of-ints? (lambda (exp)
                         (cond
-                          [(null? exp) #t]
                           [(atom? exp) #f]
+                          [(null? exp) #t]
                           [(integer? (car exp)) (list-of-ints? (cdr exp))]
                           [else #f])))
 
 (define list-of-same? (lambda (pred exp)
                         (cond
+                          [(atom? exp) #f]
                           [(null? exp) #t]
-                          [(atom? exp) #f]                          
                           [(pred (car exp)) (list-of-same? pred (cdr exp))]
                           [else #f])))
 
 (define list-of-same2 (lambda (pred)
                         (lambda (exp)
                           (cond
-                            [(null? exp) #t]
-                            [(atom? exp) #f]                          
-                            [(pred (car exp)) (list-of-same? pred (cdr exp))]
-                            [else #f]))))
+                          [(atom? exp) #f]
+                          [(null? exp) #t]
+                          [(pred (car exp)) (list-of-same? pred (cdr exp))]
+                          [else #f]))))
 
 (define contains? (lambda (thing lat)
                    (cond
@@ -49,19 +49,11 @@
                        [(null? lat1) #t]
                        [else (and (contains? (car lat1) lat2) (allmembers (cdr lat1) lat2))])))
 
-(define rember
-  (lambda (a lat)
-    (cond
-      [(null? lat) lat]
-      [(eqv? (car lat) a) (cdr lat)]
-      [else (cons (car lat) (rember a (cdr lat)))])))
-
-(define rember2
-  (lambda (a lat)
-    (cond
-      [(null? lat) lat]
-      [(eqv? (car lat) a) (cons (car lat) (rember a (cdr lat)))]
-      [else (cons (car lat) (rember2 a (cdr lat)))])))
+(define rember2 (lambda (a lat)
+                  (cond
+                    [(null? lat) '()]
+                    [(eq? a (car lat)) (cons a (remove a (cdr lat) eq?))]
+                    [else (cons (car lat) (rember2 a (cdr lat)))])))
 
 (define rember-pair (lambda (a lat)
                       (cond
