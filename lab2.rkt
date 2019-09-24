@@ -47,3 +47,10 @@
                          [(null? phone-book) 'disconnected]
                          [(eq? person (car entry)) (cadr entry)]
                          [else (phone-number person (cdr phone-book))]))))
+
+(define person (lambda (phone-number phone-book)
+                       (let ([entry (if (null? phone-book) null (car phone-book))])
+                       (cond
+                         [(null? phone-book) 'disconnected]
+                         [(eq? phone-number (cadr entry)) (car entry)]
+                         [else (person phone-number (cdr phone-book))]))))
