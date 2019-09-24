@@ -54,3 +54,37 @@
                          [(null? phone-book) 'disconnected]
                          [(eq? phone-number (cadr entry)) (car entry)]
                          [else (person phone-number (cdr phone-book))]))))
+
+(define deepen (lambda (lyst)
+                 (cond
+                   [(null? lyst) null]
+                   [else (cons (list (car lyst)) (deepen (cdr lyst)))])))
+
+(define evalBin (letrec ([helper (lambda (soFar vec)
+                                   (cond
+                                     [(null? vec) soFar]
+                                     [else (helper (+ (* soFar 2) (car vec)) (cdr vec))]))])
+                  (lambda (binVec)
+                    (helper 0 binVec))))
+
+(define sub (lambda (old new lat)
+              (cond
+                [(null? lat) null]
+                [(eq? old (car lat)) (cons new (sub old new (cdr lat)))]
+                [else (cons (car lat) (sub old new (cdr lat)))])))
+
+(define pair-list (lambda (lat1 lat2)
+                    (cond
+                      [(null? lat1) null]
+                      [else (cons (list (car lat1) (car lat2)) (pair-list (cdr lat1) (cdr lat2)))])))
+
+(define subs (lambda (oldList newList lat)
+               (let
+                   ([pairList (pair-list oldList newList)])
+                 (letrec
+                     ([helper (lambda (lat)
+                                (cond
+                                  [(null? lat ) null]
+                                  [(eq? (phone-number (car lat) pairList) 'disconnected) (cons (car lat) (helper (cdr lat)))]
+                                  [else (cons (phone-number (car lat) pairList) (helper (cdr lat)))]))])
+                   (helper lat)))))
