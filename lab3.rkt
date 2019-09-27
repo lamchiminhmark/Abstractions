@@ -41,3 +41,30 @@
                     [(not (list? L)) (list L)]
                     [(null? L) null]
                     [else (apply append (map flatten L))])))
+
+(define sum (lambda (L)
+              (cond
+                [(null? L) 0]
+                [(list? L) (apply + (map sum L))]
+                [else L])))
+
+(define add1 (lambda (x) (+ 1 x)))
+
+(define map-to (lambda (f L)
+                 (cond
+                   [(null? L) null]
+                   [(list? L) (map (lambda (smallL) (map-to f smallL)) L)]
+                   [else (f L)])))
+
+(define or-proc (lambda lat
+                  (cond
+                    [(null? lat) #f]
+                    [(eq? #t (car lat)) #t]
+                    [else (apply or-proc (cdr lat))])))
+
+(define element-of? (lambda (a L)
+                      (cond
+                        [(null? L) #f]
+                        [(list? L) (apply or-proc (map (lambda (smallL) (element-of? a smallL)) L))]
+                        [(eq? a L) #t]
+                        [else #f])))
