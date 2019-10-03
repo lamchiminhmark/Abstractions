@@ -1,8 +1,10 @@
 #lang racket
 (require "TreeDatatype.rkt")
 
-;(define index (lambda (a lat)
-;                (foldr (lambda (i el) (if (eq? a el) i )) 0 lat)))
+(define index (lambda (a lat)
+                (let
+                    ([i (foldr (lambda (el accu) (if (eq? el a) 0 (+ 1 accu))) -1 lat)])
+                  (if (< (+ i 1) (length lat)) i -1))))
 
 (define replace (lambda (a b lat)
                   (foldr (lambda (el accu) (if (eq? el a) (cons b accu) (cons el accu))) null lat)))
@@ -52,5 +54,4 @@
 (define postorder (lambda (tr)
                (cond
                  [(empty-tree? tr) null]
-                 [(leaf? tr) (list (value tr))]
-                 [else (apply append (cons (map postorder (list-of-children tr)) (list (list (value tr)))))])))
+                 [else (append (apply append (map postorder (list-of-children tr))) (list (value tr)))])))
