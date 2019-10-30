@@ -53,7 +53,7 @@
 
 (define ok? (lambda (X A)
               (cond
-              ;  [(> (car X) 3) #f]
+                [(> (car X) 3) #f]
                 [(null? A) #t]
                 [(prefix? X A) #f]
                 [else (ok? (append X (list (car A))) (cdr A))])))
