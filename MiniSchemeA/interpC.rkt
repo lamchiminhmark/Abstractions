@@ -27,5 +27,7 @@
                                [(eq? op 'minus) (- 0 (car arg-values))]                            
                                [(eq? op 'list) (apply list arg-values)]                            
                                [(eq? op 'build) (cons (car arg-values) (cadr arg-values))]                            
-                               [(eq? op 'first) (car arg-values)]
+                               [(eq? op 'first) (car (car arg-values))]                            
+                               [(eq? op 'rest) (cdr (car arg-values))]                            
+                               [(eq? op 'empty?) (eq? (car arg-values) (lookup init-env 'nil))]
                                )))
