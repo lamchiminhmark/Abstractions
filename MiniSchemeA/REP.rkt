@@ -1,7 +1,7 @@
 #lang racket
-(require "parseC.rkt")
+(require "parseF.rkt")
 (require "env.ss")
-(require "interpC.rkt")
+(require "interpF.rkt")
 
 (provide read-eval-print)
 

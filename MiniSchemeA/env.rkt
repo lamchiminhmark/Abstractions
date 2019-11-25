@@ -1,7 +1,7 @@
 
 #lang racket
 (provide environment? empty-env? extended-env? empty-env extended-env
-         syms vals old-env lookup init-env new-prim-proc prim-proc? prim-proc-symbol)
+         syms vals old-env lookup init-env new-prim-proc prim-proc? primitive-operator? prim-proc-symbol)
 
 
 ; datatype definition
@@ -62,10 +62,19 @@
 (define prim-proc-symbol (lambda (p)
                            (cadr p)))
 
-(define primitive-operators '(+ - * / add1 sub1 minus list build first rest empty?))
+(define primitive-operators '(+ - * / add1 sub1 minus list build first rest empty? equals? lt? gt? leq?))
+
+(define primitive-operator? (lambda (op)
+                              (letrec
+                                  ([helper (lambda (op vec)
+                                             (cond
+                                               [(null? vec) #f]
+                                               [(eq? op (car vec)) #t]
+                                               [else (helper op (cdr vec))]))])
+                                (helper op primitive-operators))))
 
 (define init-env (extended-env primitive-operators (map new-prim-proc primitive-operators)
-                               (extended-env '(x y nil) '(10 23 ()) (empty-env))))
+                               (extended-env '(x y nil True False) '(10 23 () True False) (empty-env))))
 
 
 
